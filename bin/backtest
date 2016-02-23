@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH << 'lib'
+
+require 'classifier'
+require 'tokeniser'
+
+EXAMPLES = File.open('data/SMSSpamCollection').map do |line|
+  label, text = line.strip.split("\t")
+
+  [Tokeniser.new.tokenise(text), label]
+end
+
+TRAINING_SIZE = 1000
+
+def backtest_with_training_range(from, to)
+  classifier = Classifier.new
+
+  training = EXAMPLES[from...to]
+  test = EXAMPLES[0..from] + EXAMPLES[to..EXAMPLES.count]
+
+  classifier.train(training)
+
+  corrects = 0
+  wrongs = 0
+
+  test.each do |featureset, label|
+    guess = classifier.classify(featureset)
+
+    if guess == label
+      corrects += 1
+    else
+      wrongs += 1
+    end
+  end
+
+  [corrects, wrongs]
+
+  accuracy = corrects / (corrects + wrongs).to_f * 100
+
+  puts "Accuracy was #{accuracy}%"
+end
+
+
+(0..EXAMPLES.count - TRAINING_SIZE).step(TRAINING_SIZE).each do |index|
+  backtest_with_training_range(index, index + TRAINING_SIZE)
+end
