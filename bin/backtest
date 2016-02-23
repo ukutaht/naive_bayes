@@ -33,15 +33,18 @@ def backtest_with_training_range(from, to)
       wrongs += 1
     end
   end
-
   [corrects, wrongs]
-
-  accuracy = corrects / (corrects + wrongs).to_f * 100
-
-  puts "Accuracy was #{accuracy}%"
 end
 
+total_corrects = 0
+total_wrongs   = 0
 
 (0..EXAMPLES.count - TRAINING_SIZE).step(TRAINING_SIZE).each do |index|
-  backtest_with_training_range(index, index + TRAINING_SIZE)
+  corrects, wrongs = backtest_with_training_range(index, index + TRAINING_SIZE)
+  total_corrects += corrects
+  total_wrongs   += wrongs
 end
+
+accuracy = total_corrects / (total_corrects + total_wrongs).to_f * 100
+
+puts "Accuracy was #{accuracy}%"
