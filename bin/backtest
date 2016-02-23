@@ -24,27 +24,43 @@ def backtest_with_training_range(from, to)
   corrects = 0
   wrongs = 0
 
+  measure = Hash.new(0)
+
   test.each do |featureset, label|
     guess = classifier.classify(featureset)
 
-    if guess == label
-      corrects += 1
-    else
-      wrongs += 1
+    case label
+    when "spam"
+      if guess == label
+        measure[:true_positives] += 1
+      else
+        measure[:false_positives] += 1
+      end
+    when "ham"
+      if guess == label
+        measure[:true_negatives] += 1
+      else
+        measure[:false_negatives] += 1
+      end
     end
   end
-  [corrects, wrongs]
+
+  measure
 end
 
-total_corrects = 0
-total_wrongs   = 0
+total_measure = Hash.new(0)
 
-(0..EXAMPLES.count - TRAINING_SIZE).step(TRAINING_SIZE).each do |index|
-  corrects, wrongs = backtest_with_training_range(index, index + TRAINING_SIZE)
-  total_corrects += corrects
-  total_wrongs   += wrongs
+measure = (0..EXAMPLES.count - TRAINING_SIZE).step(TRAINING_SIZE).each do |index|
+  chunk_measure = backtest_with_training_range(index, index + TRAINING_SIZE)
+  chunk_measure.each do |key, val|
+    total_measure[key] += val
+  end
 end
 
-accuracy = total_corrects / (total_corrects + total_wrongs).to_f * 100
+accuracy = (total_measure[:true_positives] + total_measure[:true_negatives]) / total_measure.values.reduce(&:+).to_f
+percision = total_measure[:true_positives] / (total_measure[:true_positives] + total_measure[:false_positives]).to_f
+recall = total_measure[:true_positives] / (total_measure[:true_positives] + total_measure[:false_negatives]).to_f
 
-puts "Accuracy was #{accuracy}%"
+puts "Accuracy was #{accuracy * 100}%"
+puts "Percision was #{percision * 100}%"
+puts "Recall was #{recall * 100}%"
