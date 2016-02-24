@@ -24,6 +24,7 @@ RSpec.describe Classifier do
 
     expect(classify(tokenise('Win money by clicking link!'))).to eq('spam')
     expect(classify(tokenise('Time to check in'))).to eq('ham')
+
     expect(classifier.prob_classify(tokenise('Win money'))).to eq([
         ["spam", 0.03125],
         ["ham", 0.0]

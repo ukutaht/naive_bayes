@@ -12,6 +12,9 @@ class Classifier
   end
 
   def prob_classify(features)
-    []
+    [
+      ['spam', 0],
+      ['ham', 0]
+    ]
   end
 end
