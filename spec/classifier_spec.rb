@@ -25,37 +25,9 @@ RSpec.describe Classifier do
     expect(classify(tokenise('Win money by clicking link!'))).to eq('spam')
     expect(classify(tokenise('Time to check in'))).to eq('ham')
     expect(classifier.prob_classify(tokenise('Win money'))).to eq([
-        ["spam", 0.16666666666666666],
+        ["spam", 0.03125],
         ["ham", 0.0]
     ])
-  end
-
-  it 'classifier names' do
-    play = [
-      ['outlook(overcast)', 'temp(hot)', 'humidity(high)', 'wind(weak)'],
-      ['outlook(rain)', 'temp(mild)', 'humidity(high)', 'wind(weak)'],
-      ['outlook(rain)', 'temp(cool)', 'humidity(normal)', 'wind(weak)'],
-      ['outlook(overcast)', 'temp(cool)', 'humidity(normal)', 'wind(strong)'],
-      ['outlook(sunny)', 'temp(cool)', 'humidity(normal)', 'wind(weak)'],
-      ['outlook(rain)', 'temp(mild)', 'humidity(normal)', 'wind(weak)'],
-      ['outlook(sunny)', 'temp(mild)', 'humidity(normal)', 'wind(strong)'],
-      ['outlook(overcast)', 'temp(mild)', 'humidity(high)', 'wind(strong)'],
-      ['outlook(overcast)', 'temp(hot)', 'humidity(normal)', 'wind(weak)'],
-    ]
-
-    not_play = [
-      ['outlook(sunny)', 'temp(hot)', 'humidity(high)', 'wind(weak)'],
-      ['outlook(sunny)', 'temp(hot)', 'humidity(high)', 'wind(strong)'],
-      ['outlook(rain)', 'temp(cool)', 'humidity(normal)', 'wind(strong)'],
-      ['outlook(sunny)', 'temp(mild)', 'humidity(high)', 'wind(weak)'],
-      ['outlook(rain)', 'temp(mild)', 'humidity(high)', 'wind(strong)'],
-    ]
-
-    training_set = label(play, 'play') + label(not_play, 'not_play')
-
-    classifier.train(training_set)
-
-    expect(classifier.prob_classify(['outlook(sunny)', 'temp(cool)', 'humidity(high)', 'wind(strong)'])).to eq('female')
   end
 
   def label(texts, label)
