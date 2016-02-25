@@ -13,7 +13,7 @@ end
 
 TRAINING_SIZE = 1000
 
-def backtest_with_training_range(from, to)
+def evaluate_with_training_range(from, to)
   classifier = Classifier.new
 
   training = EXAMPLES[from...to]
@@ -51,7 +51,7 @@ end
 total_measure = Hash.new(0)
 
 measure = (0..EXAMPLES.count - TRAINING_SIZE).step(TRAINING_SIZE).each do |index|
-  chunk_measure = backtest_with_training_range(index, index + TRAINING_SIZE)
+  chunk_measure = evaluate_with_training_range(index, index + TRAINING_SIZE)
   chunk_measure.each do |key, val|
     total_measure[key] += val
   end
