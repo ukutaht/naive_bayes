@@ -38,7 +38,7 @@ RSpec.describe Classifier do
   end
 
   # see: https://en.wikipedia.org/wiki/Additive_smoothing
-  # note that this will break the specifc probability expectations in the previous test
+  # You'll have to adjust the specific probabilities in previous test when smoothing is implemented
   xit 'implements parameter smoothing' do
     classifier.train(training_set)
 
