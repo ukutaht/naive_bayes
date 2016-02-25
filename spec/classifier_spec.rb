@@ -5,45 +5,57 @@ RSpec.describe Classifier do
   let(:tokeniser)  { Tokeniser.new }
   let(:classifier) { Classifier.new }
 
-  it 'classifies spam' do
+  let(:training_set) do
     spam = [
-      "Win £2000 by clicking this link!",
-      "Nigerian prince looking for your help",
-      "This is not a pyramid scheme, honestly.",
-      "Fast and easy way to get money, just click here"
+      'win money',
+      'nigerian prince wants money',
+      'get money',
     ]
 
     ham = [
-      "Time to check in to your flight London - Tenerife",
-      "Birthday party next week!"
+      'office keys',
+      'party next week',
+      'working from home today',
     ]
 
-    training_set = label(tokenise_all(spam), 'spam') + label(tokenise_all(ham), 'ham')
+    label(tokenise_all(spam), 'spam') + label(tokenise_all(ham), 'ham')
+  end
 
+  it 'classifies ham vs spam' do
     classifier.train(training_set)
 
-    expect(classify(tokenise('Win money by clicking link!'))).to eq('spam')
-    expect(classify(tokenise('Time to check in'))).to eq('ham')
-
-    expect(classifier.prob_classify(tokenise('Win money'))).to eq([
-        ["spam", 0.03125],
-        ["ham", 0.0]
+    expect(classifier.classify(tokenise('money'))).to eq('spam')
+    expect(classifier.prob_classify(tokenise('money'))).to eq([
+      ['spam', 0.1875],
+      ['ham', 0.0]
     ])
+
+    expect(classifier.classify(tokenise('office'))).to eq('ham')
+    expect(classifier.prob_classify(tokenise('office'))).to eq([
+      ['spam', 0.0],
+      ['ham', 0.05555555555555555]
+    ])
+  end
+
+  # see: https://en.wikipedia.org/wiki/Additive_smoothing
+  # note that this will break the specifc probability expectations in the previous test
+  xit 'implements parameter smoothing' do
+    classifier.train(training_set)
+
+    probabilities = classifier.prob_classify(tokenise('money')).map {|pair| pair[1]}
+
+    expect(probabilities).to all( be > 0 )
   end
 
   def label(texts, label)
     texts.map {|text| [text, label]}
   end
 
-  def tokenise(text)
-    tokeniser.tokenise(text)
-  end
-
   def tokenise_all(texts)
     texts.map {|t| tokenise(t)}
   end
 
-  def classify(text)
-    classifier.classify(text)
+  def tokenise(text)
+    tokeniser.tokenise(text)
   end
 end
