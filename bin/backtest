@@ -61,6 +61,6 @@ accuracy = (total_measure[:true_positives] + total_measure[:true_negatives]) / t
 percision = total_measure[:true_positives] / (total_measure[:true_positives] + total_measure[:false_positives]).to_f
 recall = total_measure[:true_positives] / (total_measure[:true_positives] + total_measure[:false_negatives]).to_f
 
-puts "Accuracy was #{accuracy * 100}%"
-puts "Percision was #{percision * 100}%"
-puts "Recall was #{recall * 100}%"
+puts "Accuracy: #{accuracy * 100}%"
+puts "Percision: #{percision * 100}%"
+puts "Recall: #{recall * 100}%"
