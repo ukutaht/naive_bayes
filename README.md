@@ -1,6 +1,6 @@
 # Naive Bayes workshop
 
-In this repository you'll find the skeleton for writing your own naive bayes classifier.
+In this repository you'll find the skeleton for writing your own [naive bayes classifier](https://en.wikipedia.org/wiki/Naive_Bayes_classifier).
 
 The classifier should confirm to the standard interface with two methods: `train` and `classify`.
 In this example, the method `prob_classify` is exposed as well so that we can inspect the actual
