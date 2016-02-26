@@ -42,7 +42,7 @@ probabilities would need to be recalculated for each classification.
 
 To start out with, you may want to just record
 all training data in the `train` method and run all calculations in `classify` to make the problem simpler. Worry
-about correctess before optimising. To handle large data sets, however, you may want to make use of the preprocessing step and memoize some calculations.
+about correctess before optimising. To handle large data sets, however, it is necessary to make use of the preprocessing step and memoize some calculations.
 
 #### Tests
 
